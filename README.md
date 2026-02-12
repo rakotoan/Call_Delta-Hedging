@@ -1,10 +1,10 @@
 
 # Call Delta-Hedging
 
-Welcome to the Call Delta-Hedging ! This initiative aims at backtesting a trading strategy called: **Incremental Mean Reversion**. The project encompasses data collection, backtesting and evaluation of results.
+Welcome to the Call Delta-Hedging project ! This initiative aims to backtest a **Dynamic Delta-Hedging Strategy** applied to a short call option position. The project encompasses data collection, backtesting, and performance evaluation.
 
 
-# 📄 Product: Call OTM
+# 📄 Product : Call Out of The Money (OTM)
 
 📈 Underlying Asset: **Euro Stoxx 50 ETF (EXSA.DE)**<br>
 🎯 Strike:  **K = 55 €**<br>
@@ -13,7 +13,7 @@ Welcome to the Call Delta-Hedging ! This initiative aims at backtesting a tradin
 
 # Working Conditions 
 
-📉 Volatility: **Realized Volatility - no implied volatility calibration**<br>
+📉 Volatility: **Realized Volatility - No Implied Volatility Calibration**<br>
 💶 Risk-free Interest Rate: **r = 3%**<br>
 
 
@@ -29,35 +29,54 @@ The objective of this strategy is to **dynamically delta-hedge the option positi
 
 
 
-# 🧠 What is the Incremental Mean Reversion strategy ?
+# 🧠 Delta-Hedging Methodology
 
-The strategy consists of constantly adjusting our position depending on the recent sentiment of the markets.<br>
+The strategy consists of **continuously adjusting our position on a daily basis** in response to movements in the underlying asset.
 
-In order to do so, we rely on the Z-score. 
+At the beginning of the backtest, we sell the call options and delta-hedge the position.
 
+
+### At time $t = 0$
 $$
-Z = \frac{X - \mu}{\sigma}
+\mathbf{PL}_0 = \mathbf{-C_0 + \Delta_0 S_0}
 $$
 
 Where
+- $C_0$ : Call Option Price at time $t = 0$  
+- $\Delta_0$ : Call Option Delta at time $t = 0$  
+- $S_0$ : Underlying Asset Price at time $t = 0$  
 
-$X$ is the current return   
-$\mu$ is the 20-day rolling average of returns<br>
-$\sigma$ is the 20-day rolling volatility
+Then, we dynamically adjust our hedge each day depending on whether the underlying asset moves up or down.
+
 
 <br>
 
-It measures how far our daily return is from the rolling average. 
-Especially if the gap is greater than 1, it means that the market is following a trend of buying or selling the asset. 
-If the market is selling, then our strategy consists of buying the asset with an appropriate share of our available cash. 
-If the market is buying, then our srategy consists of selling an appropriate share of our assets. 
+### At time $t = i+1$
+
+$$
+\mathrm{PL}_{i+1} = -C_{i+1} + (\Delta_{i+1} - \Delta_i) S_{i+1}
+$$
+
+Where
+- $C_{i+1}$ : Call Option Price at time $t = i+1$  
+- $\Delta_i$ : Call Option Delta at time $t = i$  
+- $\Delta_{i+1}$ : Call Option Delta at time $t = i+1$  
+- $S_{i+1}$ : Underlying Asset Price at time $t = i+1$  
+<br>
 
 
-We will not consider transaction fees and we will compare our strategy's return to the return of simply buying and holding the position over the year. 
+### Important Assumptions:
+
+- We do not consider **transaction fees**.
+- We use **realized volatility** instead of implied volatility.
+- We assume the **risk-free interest rate** is constant.
 
 # 📊 Results and Performance Summary
 
 <img width="857" height="470" alt="image" src="https://github.com/user-attachments/assets/bc4fd497-0a12-43e9-991d-99646dee0e93" />
+
+<img width="990" height="490" alt="image" src="https://github.com/user-attachments/assets/9aaca735-c9b1-45f8-aa89-e3f11211fbec" />
+
 
 
 
